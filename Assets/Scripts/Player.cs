@@ -1,18 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
-    void Update()
+    [SerializeField] private Transform publicFace;
+    
+    [SerializeField] private float camSpeed = 0.5f;
+    [SerializeField] private float movementSpeed = 1;
+
+    private float x;
+    private float y;
+    private Transform cameraTr;
+
+    public override void OnStartClient()
     {
-        if (isOwned) //проверяем, есть ли у нас права изменять этот объект
+        base.OnStartClient();
+
+        if (isOwned)
         {
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
-            float speed = 5f * Time.deltaTime;
-            transform.Translate(new Vector2(h * speed, v * speed)); //делаем простейшее движение
+            cameraTr = Camera.main.transform;
+            cameraTr.SetParent(transform);
+            cameraTr.localPosition = new Vector3(0, 1, 0);
+        }
+    }
+
+    private void Update()
+    {
+        if (isOwned)
+        {
+            x = Input.GetAxis("Mouse X");
+            y = Input.GetAxis("Mouse Y");
+            Vector3 rotateValue = new Vector3(y, x * -1, 0);
+
+            cameraTr.localEulerAngles -= rotateValue + rotateValue * camSpeed;
+
+            transform.position += new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Time.deltaTime * movementSpeed;
+
         }
     }
 }
