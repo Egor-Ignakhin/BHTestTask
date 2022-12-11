@@ -1,11 +1,8 @@
-﻿using System;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
 public class PlayerMovement : NetworkBehaviour
 {
-    public event Action<Collider> OnCollision;
-    
     private Transform cameraTr;
 
     public override void OnStartClient()
@@ -19,20 +16,22 @@ public class PlayerMovement : NetworkBehaviour
             cameraTr.localPosition = new Vector3(0, 1, 0);
         }
     }
-    
+
+    [Command(requiresAuthority = false)]
     public void Move(Vector3 additionalPosition)
     {
         transform.position += additionalPosition;
     }
 
-    public void Rotate(Vector3 additionalCameraEulers, Vector3 additionalTransformEulers)
+
+    [Command(requiresAuthority = false)]
+    public void Rotate(Vector3 additionalTransformEulers)
     {
-        cameraTr.localEulerAngles += additionalCameraEulers;
         transform.localEulerAngles += additionalTransformEulers;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void RotateCamera(Vector3 additionalCameraEulers)
     {
-        print(collision.transform.gameObject.name);
+        cameraTr.localEulerAngles += additionalCameraEulers;
     }
 }
