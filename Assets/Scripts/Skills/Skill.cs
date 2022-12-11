@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Mirror;
+using UnityEngine;
 
-//[RequireComponent(typeof(NetworkObject), typeof(Net_Skill))]
+[RequireComponent(typeof(NetworkIdentity))]
 public abstract class Skill : MonoBehaviour
 {
     protected Player Caster { get; private set; }
@@ -9,5 +10,6 @@ public abstract class Skill : MonoBehaviour
     {
         Caster = player;
     }
+
     public abstract void Cast();
 }

@@ -1,5 +1,4 @@
 using Mirror;
-using Mirror.Examples.MultipleAdditiveScenes;
 using UnityEngine;
 
 public class MyRoomManager : NetworkRoomManager
@@ -15,6 +14,7 @@ public class MyRoomManager : NetworkRoomManager
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer,
         GameObject gamePlayer)
     {
+        gamePlayer.GetComponent<Player>().Initialize();
         return true;
     }
 
