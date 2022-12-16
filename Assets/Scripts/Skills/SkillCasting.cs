@@ -4,9 +4,9 @@ using UnityEngine;
 public class SkillCasting : NetworkBehaviour
 {
     [SerializeField] private int castMouseButton;
+    [SerializeField] private Skill skillPrefab;
 
     private Player player;
-    [SerializeField] private Skill skillPrefab;
 
     public void SetPlayer(Player player)
     {

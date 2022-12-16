@@ -3,25 +3,22 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-internal class FinishScreen : MonoBehaviour
+internal class FinishScreen : NetworkBehaviour
 {
     [SerializeField] private Image background;
     [SerializeField] private TextMeshProUGUI winnerNameText;
 
-    [SerializeField] private float delaySec = 5f;
 
-    public void Activate()
+    [ClientRpc]
+    public void RpcActivate(string winnerName, float screenShowTime)
     {
         background.enabled = true;
-        winnerNameText.SetText(GameStats.GetWinnerByDamageDone().Name);
+        winnerNameText.SetText($"Winner: {winnerName}!!!");
 
-        StartCoroutine(Util.Delay(delaySec, ReloadGame));
-    }
-
-    private void ReloadGame()
-    {
-        Player.ClearIds();
-        GameStats.ClearStats();
-        NetworkManager.singleton.ServerChangeScene("Game");
+        StartCoroutine(Util.Delay(screenShowTime, () =>
+        {
+            background.enabled = false;
+            winnerNameText.SetText(string.Empty);
+        }));
     }
 }

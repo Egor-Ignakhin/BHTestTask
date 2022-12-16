@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(NetworkIdentity))]
-public abstract class Skill : MonoBehaviour
+public abstract class Skill : NetworkBehaviour
 {
     protected Player Caster { get; private set; }
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Mirror;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class Player : NetworkBehaviour
@@ -22,10 +23,13 @@ public class Player : NetworkBehaviour
     private float x;
     private float y;
 
+
     [SyncVar(hook = nameof(UpdatePlayerMaterial))]
     public bool isInvulnerable; //TODO: realise strategy pattern
+
     [SerializeField] private Material invulnerableMat;
     [SerializeField] private Material defMat;
+
 
     #region Static
 
@@ -106,10 +110,5 @@ public class Player : NetworkBehaviour
     private void UpdateTextOnClients(string playerName, int damageDone)
     {
         damageText.SetText($"{playerName}\nX : " + damageDone);
-    }
-
-    public static void ClearIds()
-    {
-        LastPlayerId = 0;
     }
 }

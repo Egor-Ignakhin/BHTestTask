@@ -1,8 +1,10 @@
+using Mirror;
 using UnityEngine;
 
 public class GameStatsManager : MonoBehaviour
 {
     [SerializeField] private FinishScreen finishScreen;
+    [SerializeField] private float delayBetweenSessions = 5f;
 
     private void Awake()
     {
@@ -19,9 +21,16 @@ public class GameStatsManager : MonoBehaviour
 
     private void StopGame()
     {
-        finishScreen.Activate();
+        finishScreen.RpcActivate(GameStats.GetWinnerByDamageDone().Name, delayBetweenSessions);
+        
+        StartCoroutine(Util.Delay(delayBetweenSessions, ReloadGame));
     }
 
+    private void ReloadGame()
+    {
+        GameStats.ClearStats();
+    }
+    
     private void OnDestroy()
     {
         GameStats.Updated -= OnStatisticsUpdated;

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class JerkSkill : Skill
@@ -11,25 +12,22 @@ public class JerkSkill : Skill
         var casterMovement = Caster.PlayerMovement;
         var startPoint = casterMovement.transform.position;
 
+        Physics.Raycast( startPoint, casterMovement.transform.forward, out var hit, castDistance);
         StartCoroutine(Util.WaitWhile(() =>
         {
             var additionalPosition = casterMovement.transform.forward * (Time.deltaTime * castPower);
             casterMovement.Move(additionalPosition);
 
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out var hit, 1f))
-            {
-                var objectHit = hit.transform;
-                if (objectHit.TryGetComponent(out Player player))
-                {
-                    if (!player.isInvulnerable)
-                    {
-                        player.Hit(hitDuration);
-                        GameStats.IncreaseDamageDone(Caster.PlayerId);
-                    }
-                }
-            }
-
             return Vector3.Distance(startPoint, casterMovement.transform.position) < castDistance;
+        }, () =>
+        {
+            var hitTransform = hit.transform;
+            if (hitTransform && hitTransform.TryGetComponent(out Player player))
+                if (!player.isInvulnerable)
+                {
+                    player.Hit(hitDuration);
+                    GameStats.IncreaseDamageDone(Caster.PlayerId);
+                }
         }));
     }
 }
