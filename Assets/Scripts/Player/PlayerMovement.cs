@@ -13,7 +13,7 @@ public class PlayerMovement : NetworkBehaviour
         {
             cameraTr = Camera.main.transform;
             cameraTr.SetParent(transform);
-            cameraTr.localPosition = new Vector3(0, 1, 0);
+            cameraTr.localPosition = new Vector3(0, 2, -2);
         }
     }
 
